@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>countdown</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+
+  </head>
+  <body>
+    <div class="clock-box">
+      <h1>DnD Countdown</h1>
+      <div class="clock">
+        <table>
+          <tr>
+            <th>D</th>
+            <th>H</th>
+            <th>M</th>
+            <th>S</th>
+            <th>mS</th>
+          </tr>
+          <tr>
+            <td class="unit days"></td>
+            <td class="unit hours"></td>
+            <td class="unit minutes"></td>
+            <td class="unit seconds"></td>
+            <td class="unit milliseconds"></td>
+          </tr>
+        </table>
+        <audio controls>
+          <source src="lib/tog.mp3" type="audio/mp3">
+        </audio>
+      </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+
+    window.dndCountdown = new function() {
+      return {
+        clockBox: $(".clock-box"),
+        clock: $(".clock"),
+        days: $(".days"),
+        hours: $(".hours"),
+        minutes: $(".minutes"),
+        seconds: $(".seconds"),
+        milliseconds: $(".milliseconds"),
+        currentTime: function(){
+          return new Date().getTime()
+        },
+        dndDate: dnd = new Date("11/20/2016 10:00:00").getTime(),
+        timeLeft: function(){
+          return this.dndDate - this.currentTime()
+        },
+        show: function () {
+          var total = this.timeLeft();
+
+          var msLength = (total % 1000).toString().length;
+          var formattedMs = (total % 1000).toString();
+
+          for (var i = 3; i > msLength; i--) {
+            formattedMs = "0" + formattedMs;
+          }
+
+          this.milliseconds.html(formattedMs);
+          total = Math.floor(total / 1000);
+          this.seconds.html(total % 60);
+          total = Math.floor(total / 60);
+          this.minutes.html(total % 60);
+          total = Math.floor(total / 60);
+          this.hours.html(total % 24);
+          total = Math.floor(total / 24);
+          this.days.html(total)
+        },
+        update: function(){
+          window.dndCountdown.show()
+        }
+      }
+    };
+
+    setInterval(dndCountdown.update, 10)
+    $("audio")[0].play();
+
+  </script>
+</html>
